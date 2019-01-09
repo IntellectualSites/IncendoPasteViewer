@@ -20,7 +20,7 @@ mongodb:
   dbSessions: isites
   uri: mongodb://localhost:27017
 limits:
-  limitPostBasicSize: 8190
+  limitPostBasicSize: 16000000
   limitRequestLineSize: 8190
 disableViews: false
 middleware:

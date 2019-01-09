@@ -21,6 +21,7 @@
  */
 package org.incendo.paste;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
@@ -113,9 +114,9 @@ public final class PasteViewer {
         for (final Object fileName : jsonFileNames) {
             final int currentIndex = index++;
             file_targets.add(String.format("<li %s><a data-target='#content-%d'>%s</a></li>",
-                first ? "class='active'" : "", currentIndex, fileName.toString()));
+                first ? "class='active'" : "", currentIndex, StringEscapeUtils.escapeHtml4(fileName.toString())));
             file_content.add(String.format("<div %s id='content-%d'><pre><code>%s</code></pre></div>",
-                first ? "" : "class='content-hide'", currentIndex, jsonFiles.get(fileName.toString()).toString()));
+                first ? "" : "class='content-hide'", currentIndex, StringEscapeUtils.escapeHtml4(jsonFiles.get(fileName.toString()).toString())));
             if (first)  {
                 first = false;
             }
