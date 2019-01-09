@@ -126,7 +126,7 @@ public final class PasteViewer {
     @ViewMatcher(filter = "paste/view/<paste>", name = "incendo-paste-main")
     public void servePaste(final AbstractRequest request, final Response response) {
         final String pasteId = getNullable(request.get("paste"));
-        final boolean raw = request.getQuery().getParameters().containsKey("raw") ||
+        final boolean raw = request.getQuery().getParameters().containsKey("raw") &&
             request.getQuery().getParameters().get("raw").equalsIgnoreCase("true");
         final Paste paste = getPaste(pasteId);
         if (raw) {
