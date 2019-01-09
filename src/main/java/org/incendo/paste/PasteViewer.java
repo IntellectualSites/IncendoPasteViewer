@@ -21,6 +21,8 @@
  */
 package org.incendo.paste;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,6 +48,7 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Launcher and main class
@@ -63,6 +66,9 @@ public final class PasteViewer {
     }
 
     private final JSONParser jsonParser = new JSONParser();
+    private final Cache<String, JSONObject> fileCache = CacheBuilder.newBuilder().maximumSize(5L)
+        .expireAfterAccess(1, TimeUnit.HOURS).build();
+
     private final File pasteFolder;
 
     private PasteViewer() {
@@ -84,22 +90,25 @@ public final class PasteViewer {
     }
 
     @NotNull private Paste getPaste(@NotNull final String id) {
-        File file;
-        if (!(file = new File(pasteFolder, String.format("%s.json", id))).exists()) {
+        File file = null;
+        JSONObject object = fileCache.getIfPresent(id);
+
+        // Check if the file exists in cache, or on disk
+        if (object == null && !(file = new File(pasteFolder, String.format("%s.json", id))).exists()) {
             Logger.error("Unknown paste ID requested: {}", id);
             return new Paste("", "", Collections.emptyList(), Collections.emptyList(), "");
         }
-        JSONObject object;
-        try (final Reader reader = new FileReader(file)){
-            object = (JSONObject) jsonParser.parse(reader);
-        } catch (final Throwable throwable) {
-            throwable.printStackTrace();
-            Logger.error("Couldn't parse paste with ID {}", id);
-            return new Paste("", "", Collections.emptyList(), Collections.emptyList(), "");
-        }
+
+        // If we didn't fetch the object from cache, read and parse it
         if (object == null) {
-            Logger.error("Couldn't create JSON object for paste with ID {}", id);
-            return new Paste("", "", Collections.emptyList(), Collections.emptyList(), "");
+            try (final Reader reader = new FileReader(file)) {
+                object = (JSONObject) jsonParser.parse(reader);
+                fileCache.put(id, object);
+            } catch (final Throwable throwable) {
+                throwable.printStackTrace();
+                Logger.error("Couldn't parse paste with ID {}", id);
+                return new Paste("", "", Collections.emptyList(), Collections.emptyList(), "");
+            }
         }
 
         final String time = object.getOrDefault("created", "").toString();
