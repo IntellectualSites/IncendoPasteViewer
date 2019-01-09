@@ -31,6 +31,7 @@ import xyz.kvantum.server.api.core.Kvantum;
 import xyz.kvantum.server.api.core.ServerImplementation;
 import xyz.kvantum.server.api.logging.Logger;
 import xyz.kvantum.server.api.request.AbstractRequest;
+import xyz.kvantum.server.api.response.Header;
 import xyz.kvantum.server.api.response.Response;
 import xyz.kvantum.server.api.util.CollectionUtil;
 import xyz.kvantum.server.api.util.RequestManager;
@@ -119,19 +120,27 @@ public final class PasteViewer {
                 first = false;
             }
         }
-        return new Paste(id, time, file_targets, file_content);
+        return new Paste(id, time, file_targets, file_content, object.toJSONString());
     }
 
-    @ViewMatcher(filter = "paste/view/<paste>", name = "incendo-paste-main", cache = false)
+    @ViewMatcher(filter = "paste/view/<paste>", name = "incendo-paste-main")
     public void servePaste(final AbstractRequest request, final Response response) {
         final String pasteId = getNullable(request.get("paste"));
+        final boolean raw = request.getQuery().getParameters().containsKey("raw") ||
+            request.getQuery().getParameters().get("raw").equalsIgnoreCase("true");
         final Paste paste = getPaste(pasteId);
-        String fileContent = ServerImplementation.getImplementation().getFileSystem().getPath("/templates/paste_view.html").readFile();
-        // Hacky, because I couldn't get kvantum to work :p
-        fileContent = fileContent.replace("{paste_id}", paste.getId()).replace("{paste_time}", paste.getTime())
-            .replace("{file_list}", CollectionUtil.join(paste.getFile_targets(), "\n"))
-            .replace("{file_content}", CollectionUtil.join(paste.getFile_content(), "\n"));
-        response.setResponse(fileContent.getBytes(StandardCharsets.UTF_8));
+        if (raw) {
+            response.setResponse(paste.getRawContent());
+            response.getHeader().set(Header.HEADER_CONTENT_TYPE, Header.CONTENT_TYPE_JSON);
+        } else {
+            String fileContent = ServerImplementation.getImplementation().getFileSystem().getPath("/templates/paste_view.html").readFile();
+            // Hacky, because I couldn't get kvantum to work :p
+            fileContent = fileContent.replace("{paste_id}", paste.getId())
+                .replace("{paste_time}", paste.getTime())
+                .replace("{file_list}", CollectionUtil.join(paste.getFile_targets(), "\n"))
+                .replace("{file_content}", CollectionUtil.join(paste.getFile_content(), "\n"));
+            response.setResponse(fileContent.getBytes(StandardCharsets.UTF_8));
+        }
     }
 
     @NotNull private static String getNullable(@Nullable final Object object) {

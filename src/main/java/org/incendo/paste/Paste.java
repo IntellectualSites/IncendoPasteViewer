@@ -34,5 +34,6 @@ public class Paste {
     private final String time;
     private final Collection<String> file_targets;
     private final Collection<String> file_content;
+    private final String rawContent;
 
 }
