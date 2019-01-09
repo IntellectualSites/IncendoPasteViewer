@@ -104,11 +104,14 @@ public final class PasteViewer {
             try (final Reader reader = new FileReader(file)) {
                 object = (JSONObject) jsonParser.parse(reader);
                 fileCache.put(id, object);
+                Logger.info("Read paste{} from disk!", id);
             } catch (final Throwable throwable) {
                 throwable.printStackTrace();
                 Logger.error("Couldn't parse paste with ID {}", id);
                 return new Paste("", "", Collections.emptyList(), Collections.emptyList(), "");
             }
+        } else {
+            Logger.info("Read paste {} from cache!", id);
         }
 
         final String time = object.getOrDefault("created", "").toString();
