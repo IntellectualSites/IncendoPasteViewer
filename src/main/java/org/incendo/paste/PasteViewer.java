@@ -113,8 +113,8 @@ public final class PasteViewer {
             final int currentIndex = index++;
             file_targets.add(String.format("<li %s><a data-target='#content-%d'>%s</a></li>",
                 first ? "class='active'" : "", currentIndex, fileName.toString()));
-            file_content.add(String.format("<div id='content-%d'><pre><code>%s</code></pre>", currentIndex,
-                jsonFiles.get(fileName.toString()).toString()));
+            file_content.add(String.format("<div %s id='content-%d'><pre><code>%s</code></pre>",
+                first ? "" : "class='content-hide'", currentIndex, jsonFiles.get(fileName.toString()).toString()));
             if (first)  {
                 first = false;
             }
