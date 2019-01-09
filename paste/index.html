@@ -1,0 +1,105 @@
+<!-- This file uses Crush syntax: https://github.com/Sauilitired/Kvantum/wiki/Crush-Templating-Engine -->
+<!DOCTYPE HTML>
+<head>
+    <title>Incendo Debug Viewer</title>
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#fdfdfd">
+    <meta name="msapplication-TileImage" content="/assets/img/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#fdfdfd">
+    <!-- Bootstrap CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,400,500" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet/less" href="assets/style/main.less" type="text/css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/dracula.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Body Section -->
+        <div id="main_content">
+            <!-- Top Bar -->
+            <div id="top-bar">
+                <span id="topbar-title">
+                    Incendo Debug Viewer: {{paste.id}} ({{paste.time}})
+                </span>
+            </div>       
+            <!-- Sidebar -->
+            <div id="side-bar">
+                <ul>
+                    <!--
+                        <li class='active'>
+                            <a data-target='#content-id'>file name</a>
+                        </li>
+                    -->
+                    {#foreach paste.file_targets -> page}
+                        {page}
+                    {/forach}
+                </ul>
+                <div class="credits">
+                    Copyright &copy; Incendo 2019
+                </div>
+            </div>
+        </div>
+        <div id="actual-content">
+            <!--
+                <div id="content-id">
+                    <pre code class="yml">
+                        ....
+                    </pre>
+                </div>
+            -->
+            {#foreach paste.file_content -> content}
+                {content}
+            {/foreach}
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script>
+        let current = '#content-1';
+        $(document).ready(function() {
+            // Initialize the highlighter
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+            // Make the buttons clickable
+            $('#side-bar li').click(function() {
+                // The target content block ID
+                let target = $(this).find('a').data('target');
+                // The target content block
+                let target_element = $(target);
+                // The currently open element
+                let current_element = $(current);
+                if (target_element.hasClass('content-hide')) {
+                    // Hide the old element and show the new one
+                    current_element.addClass('content-hide');
+                    target_element.removeClass('content-hide');
+                    // Remove old actives
+                    $(this).parent().children().each(function() {
+                        $(this).removeClass('active');
+                    });
+                    // Mark the new one as active
+                    $(this).addClass('active');
+                    current = target;
+                }
+            });
+        });
+    </script>
+</body>
