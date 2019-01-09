@@ -1,0 +1,21 @@
+views:
+  722c8ea1-6541-4bb9-be95-8619bf384abb:
+    filter: 'paste/assets/img/favicon/<file>.<extension>'
+    options:
+      folder: ./paste/assets/img/favicon/
+    type: std
+  2d1c8633-796f-4aba-ba3c-da2cebbbfb15:
+    filter: 'paste/assets/style/<file>.css'
+    options:
+      folder: ./paste/assets/style/
+    type: css
+  d01e5a66-32eb-4d3e-84de-3c59c196188d:
+    filter: 'paste/assets/js/<file>.js'
+    options:
+      folder: ./paste/assets/js/
+    type: javascript
+  53ef5da0-9d2e-4ce6-8556-6ca880c8da3b:
+    filter: 'paste/[file=index].[extension=html]'
+    options:
+      folder: ./paste/
+    type: html

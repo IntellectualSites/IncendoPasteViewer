@@ -122,7 +122,7 @@ public final class PasteViewer {
         return new Paste(id, time, file_targets, file_content);
     }
 
-    @ViewMatcher(filter = "view/<paste>", name = "incendo-paste-main", cache = false)
+    @ViewMatcher(filter = "paste/view/<paste>", name = "incendo-paste-main", cache = false)
     public void servePaste(final AbstractRequest request, final Response response) {
         final String pasteId = getNullable(request.get("paste"));
         final Paste paste = getPaste(pasteId);

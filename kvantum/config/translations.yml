@@ -1,0 +1,66 @@
+warning:
+  invalid_view: 'Invalid view (''{}'') - - Constructor has to be #(String.class, Map.class)'
+  ssl_not_enough_workers: SSL is enabled. It is recommended to use at least 3 worker threads ( Not Required )
+  application_does_not_extend: Application '{}' does not extend ApplicationStructure.class
+  port_switched: Specified port ({0}) was not available, using {1} instead
+  caching_disabled: Caching is not enabled, this can reduce load times on bigger files!
+  could_not_create_folder: Couldn't create the {} folder
+  caching_enabled: Caching is enabled, beware that this increases memory usage - So keep an eye on it
+debug:
+  startup_step: 'Calling Startup Step: ''{}'''
+  session_found: Found session ({0}={1}) for request {2}
+  debug: '>> Debug - Ignore <<'
+  connection_accepted: Connection accepted from '{}' - Handling the data!
+  internal_redirect: Redirecting request to "/{}"
+  templating_engine_debug_not_enabled: 'Config does not enable templates for: {0}'
+  output_buffer_info: 'Output buffer size: {0}kb | Input buffer size: {1}kb'
+  request_handler_dump: '> RequestHandler - Class ''{0}'', Pattern: ''{1}'''
+  client_not_accepting_gzip: The client does not accept GZIP encoding {}
+  request_served: Request was served by '{0}', with the type '{1}'. The total length of the content was '{3}kB'
+  session_deleted_other: 'Deleted session: {} (Cause: {})'
+  calling_event: Calling <{}> event
+  session_deleted_outdated: 'Deleted outdated session: {}'
+  session_set: Set session ({0}={1})
+  request_served_status: 'Request was served with HTTP status: {}'
+  templating_engine_reacting: '{0} is reacting to: {1}'
+error:
+  account_admin_failed: Failed to create admin account
+  cannot_load_translations: Cannot load the translation file
+  md5_digest_not_found: Could not load the MD5 MessageDigest Instance {}
+  database_unknown: Unknown database implementation ({})
+  standalone_no_event_caller: STANDALONE = TRUE; but there is no alternate event caller set
+  worker_failed_handling: 'Error when handling request: {}'
+  server_start_port_changed_privileged: Failed to bind to privileged port, trying 1024 instead
+  server_start_port_changed_occupied: Port {0} is occupied. Trying {1}...
+  could_not_create_plugin_folder: Couldn't create {} - No plugins were loaded
+  tick_error: Error in server ticking...
+  database_session_unknown: Unknown database implementation ({}). Using a DumbSessionDatabase instead.
+info:
+  validating_views: Validating Views...
+  standalone_not_loading_plugins: Running as standalone, not loading plugins!
+  port_occupied: Specified port was occupied, running on {} instead!
+  server_start_failed: Failed to start server...
+  server_started: The server is started
+  accepting_connections_on: Accepting connections on 'http://{}
+  request_log: 'Request: [Address: {} | User Agent: {} | Request String: {} | Host:
+    {} | Query: {} ]'
+  application_cannot_find: Couldn't find application '{}'
+  views_disabled: Skipped view loading (Disabled)
+  cmd_help_header: '# Available Commands ( Page {0}/{1} ) '
+  loading_views: Loading views...
+  shutting_down: Shutting down
+  starting_ssl_on_port: Starting the HTTPS server on port {}
+  disabled_plugin: Disabled plugin '{}'
+  waiting_for_executor_service: Waiting for the executor service to shutdown
+  templating_engine_status: 'Templating language ''{0}'': {1}'
+  starting_on_port: Starting the HTTP server on port {}
+  cmd_help_footer: '# Type ''/help {0}'' to see the next page'
+  accepting_ssl_connections_on: Accepting SSL connections on 'https://{}'
+  cleared_views: Cleared views ( {} )
+  initializing_location_services: Initializing location services
+  account_admin_created: 'Created admin account with password: "{}"'
+  application_cannot_initiate: Couldn't initiate application '{}'
+  session_key_invalid: Wrong session key
+  creating: Creating {}...
+  cmd_help_item: '> Command: /{0} | Usage: {1} | Description: {2} '
+  disabling_plugins: Disabling all plugins

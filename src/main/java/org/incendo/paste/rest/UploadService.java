@@ -67,7 +67,7 @@ public final class UploadService extends RestResponse {
     private final File pasteFolder;
 
     public UploadService(@NotNull final File pasteFolder) {
-        super(HttpMethod.POST, new ViewPattern("upload"));
+        super(HttpMethod.POST, new ViewPattern("paste/paste/upload"));
         this.pasteFolder = pasteFolder;
         if (!pasteFolder.exists() && !pasteFolder.mkdir()) {
             throw new IllegalArgumentException(String.format("Failed to create paste folder %s", pasteFolder.getName()));
