@@ -11,9 +11,9 @@ ssl:
 timeout: 15
 requestHandlerSortRate: 60
 buffer:
-  in: 100000
-  files: 100000
-  out: 100000
+  in: 1000000
+  files: 1000000
+  out: 1000000
 mongodb:
   dbMorphia: isites
   collectionSessions: sessions
