@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+    }
+    dependencies {
+        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
+    }
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'com.github.hierynomus.license'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group 'org.incendo'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
+
+repositories {
+    maven {
+        url 'https://incendo.org/mvn/repository/maven-releases/'
+    }
+}
+
+dependencies {
+    compile 'xyz.kvantum:Implementation:1.3'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.25.2'
+}
+
+jar.enabled = false
+
+license {
+    header rootProject.file('HEADER')
+    mapping 'java', 'SLASHSTAR_STYLE'
+    ext.year = 2018
+}
+
+build.dependsOn(licenseFormat)
+build.dependsOn(shadowJar)
