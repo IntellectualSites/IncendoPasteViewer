@@ -89,7 +89,7 @@ public final class PasteViewer {
         File file;
         if (!(file = new File(pasteFolder, String.format("%s.json", id))).exists()) {
             Logger.error("Unknown paste ID requested: {}", id);
-            return new Paste("", "", Collections.emptyList(), Collections.emptyList());
+            return new Paste("", "", Collections.emptyList(), Collections.emptyList(), "");
         }
         JSONObject object;
         try (final Reader reader = new FileReader(file)){
@@ -97,11 +97,11 @@ public final class PasteViewer {
         } catch (final Throwable throwable) {
             throwable.printStackTrace();
             Logger.error("Couldn't parse paste with ID {}", id);
-            return new Paste("", "", Collections.emptyList(), Collections.emptyList());
+            return new Paste("", "", Collections.emptyList(), Collections.emptyList(), "");
         }
         if (object == null) {
             Logger.error("Couldn't create JSON object for paste with ID {}", id);
-            return new Paste("", "", Collections.emptyList(), Collections.emptyList());
+            return new Paste("", "", Collections.emptyList(), Collections.emptyList(), "");
         }
 
         final String time = object.getOrDefault("created", "").toString();
