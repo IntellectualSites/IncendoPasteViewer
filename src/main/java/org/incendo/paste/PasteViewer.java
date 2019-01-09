@@ -45,10 +45,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Launcher and main class
@@ -117,7 +114,14 @@ public final class PasteViewer {
             final String language;
             if (fileName.toString().contains(".")) {
                 final String[] parts = fileName.toString().split("\\.");
-                language = parts[parts.length - 1];
+                final String rawLanguage = parts[parts.length - 1].toLowerCase(Locale.ENGLISH);
+                if (rawLanguage.equals("yml"))  {
+                    language = "yaml";
+                } else if (rawLanguage.equals("log")) {
+                    language = "plaintext";
+                } else {
+                    language = rawLanguage;
+                }
             } else {
                 language = "plaintext";
             }
