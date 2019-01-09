@@ -113,10 +113,19 @@ public final class PasteViewer {
         boolean first = true;
         for (final Object fileName : jsonFileNames) {
             final int currentIndex = index++;
+
+            final String language;
+            if (fileName.toString().contains(".")) {
+                final String[] parts = fileName.toString().split("\\.");
+                language = parts[parts.length - 1];
+            } else {
+                language = "plaintext";
+            }
+
             file_targets.add(String.format("<li %s><a data-target='#content-%d'>%s</a></li>",
                 first ? "class='active'" : "", currentIndex, StringEscapeUtils.escapeHtml4(fileName.toString())));
-            file_content.add(String.format("<div style='max-height: 93vh' %s id='content-%d'><pre><code>%s</code></pre></div>",
-                first ? "" : "class='content-hide'", currentIndex, StringEscapeUtils.escapeHtml4(jsonFiles.get(fileName.toString()).toString())));
+            file_content.add(String.format("<div style='max-height: 93vh' %s id='content-%d'><pre><code class='%s'>%s</code></pre></div>",
+                first ? "" : "class='content-hide'", currentIndex, language, StringEscapeUtils.escapeHtml4(jsonFiles.get(fileName.toString()).toString())));
             if (first)  {
                 first = false;
             }
