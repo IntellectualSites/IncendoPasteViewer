@@ -49,11 +49,31 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
  * Launcher and main class
  */
 public final class PasteViewer {
+
+    private static final Pattern IP_PATTERN = Pattern.compile("((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)");
+    private static final String[] IP_REPLACE_STRINGS = new String[] {
+        "Whenever, Wherever",
+        "Underneath Your Clothes",
+        "She Wolf",
+        "Loca",
+        "Waka Waka",
+        "Chantaje",
+        "La Tortura",
+        "Cant Remember To Forget You",
+        "Did It Again",
+        "Dare",
+        "Clandestino",
+        "Nada",
+        "Ojos Así",
+        "Rabiosa",
+        "Try Everything"
+    };
 
     public static void main(final String[] args) {
         // Because Java is stupid...
@@ -138,10 +158,18 @@ public final class PasteViewer {
                 language = "plaintext";
             }
 
+            String filteredContent = StringEscapeUtils.escapeHtml4(jsonFiles.get(fileName.toString()).toString());
+
+            String tempString = filteredContent;
+            while (!(tempString = tempString.replaceFirst("(\\d+.){3}\\d+",
+                String.format("\'%s\'", IP_REPLACE_STRINGS[new Random().nextInt(IP_REPLACE_STRINGS.length)]))).equals(filteredContent)) {
+                filteredContent = tempString;
+            }
+
             file_targets.add(String.format("<li %s><a data-target='#content-%d'>%s</a></li>",
                 first ? "class='active'" : "", currentIndex, StringEscapeUtils.escapeHtml4(fileName.toString())));
             file_content.add(String.format("<div style='max-height: 93vh' %s id='content-%d'><pre class='%s'><code class='%s'>%s</code></pre></div>",
-                first ? "" : "class='content-hide'", currentIndex, language, language, StringEscapeUtils.escapeHtml4(jsonFiles.get(fileName.toString()).toString())));
+                first ? "" : "class='content-hide'", currentIndex, language, language, filteredContent));
             if (first)  {
                 first = false;
             }
