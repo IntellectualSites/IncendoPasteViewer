@@ -161,8 +161,9 @@ public final class PasteViewer {
             String filteredContent = StringEscapeUtils.escapeHtml4(jsonFiles.get(fileName.toString()).toString());
 
             String tempString = filteredContent;
-            while (!(tempString = tempString.replaceFirst("([\\s()\\]\\[]*)((\\d+.){3}\\d+)([\\s()\\]\\[]*)",
-                String.format("$1%s$4", IP_REPLACE_STRINGS[new Random().nextInt(IP_REPLACE_STRINGS.length)]))).equals(filteredContent)) {
+            while (!(tempString = tempString.replaceFirst("\\A(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}"
+                    + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\z",
+                String.format("'%s'", IP_REPLACE_STRINGS[new Random().nextInt(IP_REPLACE_STRINGS.length)]))).equals(filteredContent)) {
                 filteredContent = tempString;
             }
 
