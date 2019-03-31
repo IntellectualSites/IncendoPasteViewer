@@ -27,6 +27,10 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.10
 targetCompatibility = 1.10
 
+tasks.withType(JavaCompile) {
+    options.incremental = false
+}
+
 repositories {
     mavenCentral()
     flatDir {
