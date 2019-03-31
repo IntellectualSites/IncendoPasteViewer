@@ -24,8 +24,6 @@ package org.incendo.paste;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -89,7 +87,7 @@ public final class PasteViewer {
         });
     }
 
-    @NotNull private Paste getPaste(@NotNull final String id) {
+    private Paste getPaste(final String id) {
         File file = null;
         JSONObject object = fileCache.getIfPresent(id);
 
@@ -171,7 +169,7 @@ public final class PasteViewer {
         }
     }
 
-    @NotNull private static String getNullable(@Nullable final Object object) {
+    private static String getNullable(final Object object) {
         if (object == null) {
             return "";
         }

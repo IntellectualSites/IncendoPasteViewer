@@ -22,14 +22,13 @@
 package org.incendo.paste;
 
 import org.incendo.paste.rest.UploadService;
-import org.jetbrains.annotations.NotNull;
 import xyz.kvantum.server.api.views.rest.RestHandler;
 
 import java.io.File;
 
 final class PasteRestService extends RestHandler {
 
-    PasteRestService(@NotNull final File baseFolder) {
+    PasteRestService(final File baseFolder) {
         this.registerHandler(new UploadService(new File(baseFolder, "pastes")));
     }
 

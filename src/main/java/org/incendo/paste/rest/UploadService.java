@@ -21,7 +21,6 @@
  */
 package org.incendo.paste.rest;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import xyz.kvantum.server.api.matching.ViewPattern;
@@ -29,6 +28,7 @@ import xyz.kvantum.server.api.request.AbstractRequest;
 import xyz.kvantum.server.api.request.HttpMethod;
 import xyz.kvantum.server.api.request.post.JsonPostRequest;
 import xyz.kvantum.server.api.request.post.PostRequest;
+import xyz.kvantum.server.api.util.AsciiString;
 import xyz.kvantum.server.api.util.MapBuilder;
 import xyz.kvantum.server.api.views.rest.RestResponse;
 
@@ -53,20 +53,20 @@ public final class UploadService extends RestResponse {
     private static final JSONObject REQUEST_FAILED_TO_STORE =
         new JSONObject(MapBuilder.<String, Object>newHashMap().put("response", "failed to store paste").get());
 
-    private static final Map<String, Long> WRITE_THROTTLE = new ConcurrentHashMap<>();
+    private static final Map<AsciiString, Long> WRITE_THROTTLE = new ConcurrentHashMap<>();
     private static final long WRITE_THROTTLE_TIMEOUT = TimeUnit.MINUTES.toMillis(5);
 
     private static final Collection<String>
         VALID_APPLICATIONS = Arrays.asList("plotsquared", "fastasyncworldedit", "incendopermissions", "kvantum");
 
-    @NotNull private static JSONObject missingFileContent(@NotNull final String fileName) {
+    private static JSONObject missingFileContent(final String fileName) {
         return new JSONObject(MapBuilder.<String, Object>newHashMap().put("response",
             String.format("Missing file content for file %s", fileName)).get());
     }
 
     private final File pasteFolder;
 
-    public UploadService(@NotNull final File pasteFolder) {
+    public UploadService(final File pasteFolder) {
         super(HttpMethod.POST, new ViewPattern("paste/upload"));
         this.pasteFolder = pasteFolder;
         if (!pasteFolder.exists() && !pasteFolder.mkdir()) {
@@ -75,8 +75,9 @@ public final class UploadService extends RestResponse {
     }
 
     @Override public JSONObject generate(@Nonnull AbstractRequest abstractRequest) {
-        if (WRITE_THROTTLE.containsKey(abstractRequest.getSocket().getIP())) {
-            final long lastWrite = WRITE_THROTTLE.get(abstractRequest.getSocket().getIP());
+        final AsciiString ip = abstractRequest.getHeader("x-forwarded-for");
+        if (WRITE_THROTTLE.containsKey(ip)) {
+            final long lastWrite = WRITE_THROTTLE.get(ip);
             if ((System.currentTimeMillis() - lastWrite) < WRITE_THROTTLE_TIMEOUT) {
                 final long newWrite = WRITE_THROTTLE_TIMEOUT - ((System.currentTimeMillis()) - lastWrite);
                 final long newWriteMinutes = TimeUnit.MILLISECONDS.toMinutes(newWrite);
@@ -84,7 +85,7 @@ public final class UploadService extends RestResponse {
                     String.format("you need to wait %d minutes before creating a new paste", newWriteMinutes)).get());
             }
         }
-        WRITE_THROTTLE.put(abstractRequest.getSocket().getIP(), System.currentTimeMillis());
+        WRITE_THROTTLE.put(ip, System.currentTimeMillis());
 
         final PostRequest request = abstractRequest.getPostRequest();
         if (!(request instanceof JsonPostRequest)) {
